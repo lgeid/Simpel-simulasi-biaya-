@@ -7,10 +7,12 @@
     <style>
         :root {
             --primary-color: #e6004c;
-            --bg-color: #ffffff;
+            --bg-color: #f4f5f7;
             --text-color: #212529;
+            --text-muted: #5a626a;
             --border-color: #dee2e6;
             --card-bg: #ffffff;
+            --input-bg: #ffffff;
             --success-color: #28a745;
             --warning-color: #ffc107;
             --danger-color: #dc3545;
@@ -18,53 +20,127 @@
         [data-theme="dark"] {
             --bg-color: #121212;
             --text-color: #f8f9fa;
+            --text-muted: #a1a1a6;
             --border-color: #343a40;
             --card-bg: #1e1e1e;
+            --input-bg: #2a2a2a;
         }
-        * {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Roboto, sans-serif;}
-        body {background: var(--bg-color); color: var(--text-color); padding:16px; line-height:1.5;}
-        .container {max-width: 720px; margin:0 auto;}
-        .card {background: var(--card-bg); border-radius:12px; padding:20px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); margin-bottom:20px;}
-        .form-group {margin-bottom:16px;}
-        label {display:block; margin-bottom:6px; font-weight:500; font-size:14px;}
-        .custom-select, .custom-input {width:100%; padding:10px 12px; border-radius:6px; border:1px solid var(--border-color); background:transparent; color:var(--text-color); font-size:14px;}
-        .btn {padding:10px 16px; border-radius:6px; border:none; font-weight:500; cursor:pointer; font-size:14px;}
-        .btn-primary {background:var(--primary-color); color:white;}
-        .result-panel {background: rgba(230, 0, 76, 0.05); border-radius:8px; padding:16px; margin-top:20px;}
-        .result-row {display:flex; justify-content:space-between; padding:8px 0; font-size:14px;}
-        .total-row {font-weight:700; font-size:16px; border-top:1px solid var(--border-color); padding-top:12px; color:var(--primary-color);}
-        .info-text {font-size:12px; color:#6c757d; margin-top:4px;}
-        .form-check {display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:14px;}
-        .popup-guide {position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:999; display:none; padding:20px; overflow-y:auto;}
-        .guide-header {display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
-        .guide-body {background:var(--card-bg); border-radius:12px; padding:20px;}
-        .step-list {list-style:none;}
-        .step-item {margin-bottom:12px;}
-        .step-num {display:inline-block; width:24px; height:24px; line-height:24px; text-align:center; border-radius:50%; background:var(--primary-color); color:white; font-size:12px; font-weight:bold; margin-right:8px;}
-        .btn-icon {width:32px; height:32px; border-radius:50%; border:none; background:var(--border-color); cursor:pointer;}
-        .main-footer {text-align:center; font-size:12px; color:#6c757d; margin-top:20px;}
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        body { background: var(--bg-color); color: var(--text-color); padding: 16px; line-height: 1.5; }
+        .container { max-width: 600px; margin: 0 auto; }
+        
+        .card { background: var(--card-bg); border-radius: 16px; padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); margin-bottom: 20px; border-top: 4px solid var(--primary-color); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+        .card-title h2 { color: var(--primary-color); font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 13.5px; color: var(--text-color); }
+        
+        .custom-select, .custom-input { 
+            width: 100%; padding: 12px 14px; border-radius: 8px; border: 1.5px solid var(--border-color); 
+            background-color: var(--input-bg); color: var(--text-color); font-size: 14px; outline: none; transition: all 0.2s; 
+        }
+        .custom-select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e6004c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; cursor: pointer; }
+        .custom-select:focus, .custom-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(230,0,76,0.1); }
+        
+        .custom-input { margin-bottom: 8px; }
+        .custom-input:last-child { margin-bottom: 0; }
+        
+        .custom-select optgroup { font-weight: 700; background: rgba(0,0,0,0.03); }
+        .custom-select option { font-weight: 500; background: var(--card-bg); color: var(--text-color); }
+        
+        .info-text { font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block; }
+        .alert-text { font-size: 11px; color: var(--primary-color); font-weight: 600; margin-top: 4px; display: none; }
+
+        /* Premium Checkbox Card untuk Evening Care */
+        .premium-checkbox-card {
+            display: flex; align-items: center; justify-content: space-between;
+            background-color: var(--input-bg); border: 1.5px solid var(--border-color); border-radius: 8px;
+            padding: 12px 16px; cursor: pointer; user-select: none; transition: all 0.25s ease;
+        }
+        .premium-checkbox-card:hover { border-color: var(--primary-color); background-color: rgba(230,0,76,0.02); }
+        .premium-checkbox-card.checked { border-color: var(--primary-color); background-color: rgba(230,0,76,0.06); }
+        
+        .checkbox-info { display: flex; flex-direction: column; gap: 2px; }
+        .checkbox-title { font-size: 13.5px; font-weight: 600; color: var(--text-color); }
+        .checkbox-sub { font-size: 11px; color: var(--text-muted); }
+        
+        .custom-indicator {
+            width: 20px; height: 20px; border: 2px solid var(--border-color); border-radius: 4px;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+            background-color: var(--input-bg); flex-shrink: 0;
+        }
+        .premium-checkbox-card.checked .custom-indicator { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .custom-indicator::after {
+            content: ''; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0;
+            transform: rotate(45deg) scale(0); transition: all 0.2s ease; margin-bottom: 2px;
+        }
+        .premium-checkbox-card.checked .custom-indicator::after { transform: rotate(45deg) scale(1); }
+
+        /* Status Terkunci */
+        .locked-input { opacity: 0.45; pointer-events: none; background-color: var(--border-color) !important; }
+
+        .result-panel { background: rgba(230, 0, 76, 0.03); border: 1px dashed var(--primary-color); border-radius: 12px; padding: 20px; margin-top: 24px; }
+        .panel-header { font-size: 15px; font-weight: 700; color: var(--primary-color); margin-bottom: 15px; border-bottom: 1px solid rgba(230,0,76,0.1); padding-bottom: 10px; }
+        
+        .result-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13.5px; color: var(--text-muted); }
+        .result-row span:last-child { color: var(--text-color); font-weight: 600; text-align: right; }
+        
+        .total-row { font-weight: 800; font-size: 17px; border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 10px; color: var(--text-color); background: rgba(230,0,76,0.06); padding: 12px; border-radius: 8px; align-items: center; }
+        .total-row span:last-child { color: var(--primary-color); font-size: 19px; }
+
+        .btn-group { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+        .btn { padding: 12px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 13.5px; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+        .btn-primary { background: var(--primary-color); color: white; box-shadow: 0 4px 12px rgba(230,0,76,0.2); }
+        .btn-primary:hover { background: #c20040; transform: translateY(-2px); }
+        .btn-icon { width: 44px; height: 44px; padding: 0; justify-content: center; background: var(--input-bg); border: 1.5px solid var(--border-color); color: var(--text-color); font-size: 18px; border-radius: 8px; }
+        .btn-icon:hover { background: var(--border-color); }
+
+        /* Panduan Popup */
+        .popup-guide { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; display: none; padding: 15px; overflow-y: auto; backdrop-filter: blur(4px); }
+        .guide-content { background: var(--card-bg); border-radius: 16px; max-width: 500px; margin: 40px auto; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .guide-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: rgba(230,0,76,0.05); border-bottom: 1px solid var(--border-color); }
+        .guide-header h3 { color: var(--primary-color); font-size: 16px; margin: 0; }
+        .guide-body { padding: 24px; }
+        
+        .step-list { list-style: none; }
+        .step-item { margin-bottom: 16px; display: flex; gap: 12px; font-size: 13.5px; color: var(--text-color); line-height: 1.6; }
+        .step-num { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--primary-color); color: white; font-size: 12px; font-weight: bold; flex-shrink: 0; margin-top: 2px; }
+
+        .main-footer { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 30px; font-weight: 500; }
+        .main-footer span { color: var(--primary-color); font-weight: 700; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="card">
-        <h2 style="color:var(--primary-color); margin-bottom:16px; font-size:18px;">📟 PERHITUNGAN ESTIMASI BIAYA SERVICE</h2>
-        <p class="info-text" style="margin-bottom:20px;">Semua perhitungan sifatnya estimasi atau perkiraan</p>
+        <div class="card-header">
+            <div class="card-title">
+                <h2>🧮 SIMULASI BIAYA</h2>
+            </div>
+            <span class="info-text" style="margin: 0; color: #2ec4b6; font-weight: 600;">• Estimasi Kasar</span>
+        </div>
 
         <div class="form-group">
             <label>Tipe Layanan</label>
-            <div class="form-check">
-                <input type="radio" name="service_type" value="in_shop" id="inShop" checked>
-                <label for="inShop">🏪 Carry - in (bawa ke Service center)</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" name="service_type" value="in_home" id="inHome">
-                <label for="inHome">🏠 In-Home - Kunjungan ke Rumah</label>
-            </div>
-            <div class="form-check" id="ecOption" style="display:none; margin-left:20px;">
-                <input type="checkbox" id="eveningCare">
-                <label for="eveningCare">🌙 Evening Care (Layanan Malam)</label>
+            <select id="serviceTypeSelect" class="custom-select">
+                <option value="in_shop" selected>🏪 Carry - in (Bawa ke Service Center)</option>
+                <option value="in_home">🏠 In-Home - Kunjungan ke Rumah</option>
+            </select>
+            
+            <div id="ecOption" style="display:none; margin-top:10px;">
+                <div class="premium-checkbox-card" id="cardEveningCare">
+                    <div class="checkbox-info">
+                        <span class="checkbox-title">🌙 Evening Care (Layanan Malam)</span>
+                        <span class="checkbox-sub">Ada biaya tambahan sebesar <strong>+ Rp 150.000</strong></span>
+                    </div>
+                    <div class="custom-indicator"></div>
+                    <input type="checkbox" id="eveningCare" style="display: none;">
+                </div>
             </div>
         </div>
 
@@ -73,7 +149,6 @@
             <select id="device" class="custom-select">
                 <option value="" disabled selected>--- Pilih Jenis Produk ---</option>
                 
-                <!-- 📺 1. KATEGORI TV -->
                 <optgroup label="📺 1. KATEGORI TV" data-type="tv">
                     <option value="99000|100000|130000|90000">▸ TV 14 - 21 Inch</option>
                     <option value="165000|255555|350000|130000">▸ TV 24 - 32 Inch</option>
@@ -83,25 +158,21 @@
                     <option value="500000|600000|700000|200000">▸ TV 85 - 100 Inch</option>
                 </optgroup>
 
-                <!-- 🧊 2. KATEGORI KULKAS -->
                 <optgroup label="🧊 2. KATEGORI KULKAS" data-type="kulkas">
                     <option value="115000|210000|290000|110000">▸ Kulkas 1 Pintu / 2 Pintu</option>
                     <option value="155000|265000|370000|145000">▸ Kulkas Side By Side / Multi Door</option>
                 </optgroup>
 
-                <!-- ❄️ 3. KATEGORI AC -->
                 <optgroup label="❄️ 3. KATEGORI AC" data-type="ac">
                     <option value="110000|300000|420000|110000">▸ AC Split / Cassette / Standing</option>
                 </optgroup>
 
-                <!-- 🧺 4. KATEGORI MESIN CUCI -->
                 <optgroup label="🧺 4. KATEGORI MESIN CUCI" data-type="mesin_cuci">
                     <option value="120000|130000|200000|110000">▸ Mesin Cuci 1 Tabung / Top Load</option>
                     <option value="100000|120000|180000|100000">▸ Mesin Cuci 2 Tabung</option>
                     <option value="150000|185000|260000|130000">▸ Front Load / Dryer / Washer Dryer</option>
                 </optgroup>
 
-                <!-- 🔊 5. KATEGORI AUDIO & KECIL -->
                 <optgroup label="🔊 5. KATEGORI AUDIO & KECIL" data-type="lainnya">
                     <option value="160000|160000|200000|80000">▸ Microwave / Home Theater / Xboom</option>
                     <option value="120000|210000|310000|110000">▸ Monitor / Proyektor</option>
@@ -110,51 +181,49 @@
         </div>
 
         <div class="form-group">
-            <label>🔧 Level Kerusakan <span style="font-size: 10px; color: #e6004c;">(SISTEM OTOMATIS)</span></label>
-            <label class="checkbox-label" style="justify-content: space-between; padding: 0; margin-bottom:8px;">
-                <span>📌 <em>Otomatis menyesuaikan jika ada pergantian sparepart</em></span>
-                <span style="font-weight:700; color:var(--primary-color); font-size: 11px;">OTOMATIS</span>
+            <label style="display: flex; justify-content: space-between;">
+                <span>🔧 Level Kerusakan</span>
+                <span style="font-size: 10px; color: var(--primary-color);">OTOMATIS / MANUAL</span>
             </label>
             <select id="damageLevel" class="custom-select">
-                <option value="" disabled selected>--- Pilih / Otomatis ---</option>
+                <option value="" disabled selected>--- Pilih Level Kerusakan ---</option>
                 <option value="minor">🔅 Minor </option>
                 <option value="mayor">🔆 Mayor </option>
                 <option value="special">⚡ Special </option>
                 <option value="cek">📝 Pengecekan / Pembatalan</option>
             </select>
-            <p id="infoCek" class="info-text" style="display: none;">ℹ️ Biaya pengecekan sesuai standar produk yang dipilih.</p>
+            <span id="infoCek" class="alert-text">ℹ️ Anda memilih Pengecekan. Biaya part/freon terkunci.</span>
         </div>
 
         <div class="form-group" id="freonPanel" style="display: none;">
             <label>❄️ Biaya Isi/Ulang Freon (Rp)</label>
-            <input type="number" id="freonCost" class="custom-input" placeholder="Masukkan nominal jika ada (contoh: 150000)" min="0" step="1000">
+            <input type="number" id="freonCost" class="custom-input" placeholder="Nominal jika ada (contoh: 150000)" min="0" step="1000">
         </div>
 
         <div class="form-group">
-            <label>🔩 Harga spare part jika ada pergantian (Rp)</label>
-            <input type="number" id="extraCost" class="custom-input" placeholder="Masukkan nominal jika ada (contoh: 500000)" min="0" step="1000">
-            <small style="font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block;">*Masukan harga spare part jika perbaikan menggunakan sparepart</small>
+            <label>🔩 Nama & Harga Spare Part (Jika ada pergantian)</label>
+            <input type="text" id="sparepartName" class="custom-input" placeholder="Ketik nama part (contoh: Mainboard)">
+            <input type="number" id="extraCost" class="custom-input" placeholder="Masukkan harga (contoh: 500000)" min="0" step="1000">
+            <span class="info-text">*Isi bagian ini jika perbaikan menggunakan sparepart</span>
         </div>
 
         <div class="result-panel">
-            <div class="panel-header-inline">
-                <h3>📋 RINCIAN BIAYA</h3>
-            </div>
+            <div class="panel-header">📋 RINCIAN ESTIMASI</div>
             
             <div class="result-row">
-                <span>Biaya Jasa Servis</span>
+                <span>Biaya Jasa Servis / Pengecekan</span>
                 <span id="biayaJasa">Rp 0</span>
             </div>
             <div class="result-row" id="rowKunjungan" style="display:none;">
-                <span>Biaya Kunjungan - In Home</span>
+                <span>Biaya Kunjungan (In Home)</span>
                 <span>Rp 45.000</span>
             </div>
             <div class="result-row" id="rowEC" style="display:none;">
-                <span>Layanan EC - Evening Care</span>
+                <span>Layanan EC (Malam)</span>
                 <span>Rp 150.000</span>
             </div>
             <div class="result-row" id="rowSparepart" style="display:none;">
-                <span>Biaya Sparepart</span>
+                <span id="labelSparepartResult">Biaya Sparepart</span>
                 <span id="valSparepart">Rp 0</span>
             </div>
             <div class="result-row" id="rowFreon" style="display:none;">
@@ -170,181 +239,246 @@
                 <span id="ppnVal">Rp 0</span>
             </div>
             <div class="result-row total-row">
-                <span>💳 TOTAL AKHIR DIBAYAR</span>
+                <span>💳 TOTAL DIBAYAR</span>
                 <span id="totalPrice">Rp 0</span>
-            </div>
-            
-            <div class="footer-text" style="margin-top:12px; font-size:11px; text-align:center; color:#6c757d;">
-                *Simulasi biaya perbaikan
             </div>
         </div>
 
-        <div style="margin-top:20px; text-align:center;">
-            <button class="btn btn-primary" id="openGuideBtn">📘 Panduan Penggunaan</button>
-            <button class="btn btn-icon" id="themeBtn" style="margin-left:8px;">🌓</button>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="openGuideBtn">📘 Panduan</button>
+            <button class="btn btn-icon" id="themeBtn" title="Ubah Tema">🌓</button>
         </div>
     </div>
 
     <div class="popup-guide" id="popupGuide">
-        <div class="guide-header">
-            <button class="btn-icon" id="closeGuideBtn">&lt;</button>
-            <div class="guide-title">📘 Info Penggunaan</div>
-        </div>
-        <div class="guide-body">
-            <ul class="step-list">
-                <li class="step-item">
-                    <span class="step-num">1</span>
-                    <div><strong>Pilih Tipe Layanan</strong>: <em>Carry-In</em> (bawa ke tempat) atau <em>In-Home</em> (Kunjungan kerumah). Layanan In-home service tersedia opsi <strong>EC - Evening Care dengan biaya tambahan (Rp 150.000)</strong>.</div>
-                </li>
-                <li class="step-item">
-                    <span class="step-num">2</span>
-                    <div><strong>Pilih Jenis Produk</strong> sesuai kategori yang akan di service <strong>Tambahan biaya Freon</strong> otomatis muncul khusus produk AC & Kulkas , akan di isi jika pengerjaan menggunakan flashing / freon</div>
-                </li>
-                <li class="step-item">
-                    <span class="step-num">3</span>
-                    <div><strong>Level perbaikan otomatis jika perbaikan mengunakan pergantian spare part </strong>: , anda dapat memilih level <strong>"Pengecekan / Pembatalan"</strong> jika ingin mengetahui biaya yang akan di kenakan jika terjadi pembatalan setelah teknisi melakukan pemeriksaan <strong>📢</strong>: untuk layanan  In-Home, otomatis menambahkan biaya kunjungan <strong>📌 SISTEM OTOMATIS</strong> akan mengubah ke <strong> level Mayor / Special</strong> jika perbaikan menggunakan sparepart ❗*biaya pengecekan tidak akan di tambahkan jika perbaikan di lanjutkan , dan setuju dengan biaya yang di sampaikan teknisi sesuai dengan kerusakan produk.</div>
-                </li>
-                <li class="step-item">
-                    <span class="step-num">4</span>
-                    <div><strong>Masukkan biaya tambahan</strong> jika ada penggantian sparepart atau isi freon. Semua hitungan berjalan otomatis, termasuk perhitungan <strong>PPN 11% ❗Biaya pengecekan atau pembatalan dikenakan hanya kalau perbaikan di batalkan setelah teknisi berkunjung</strong>.</div>
-                </li>
-                <li class="step-item">
-                    <span class="step-num">💡</span>
-                    <div>Gunakan tombol <strong>🌓</strong> di pojok kanan atas untuk mengubah tampilan mode terang / gelap.</div>
-                </li>
-            </ul>
+        <div class="guide-content">
+            <div class="guide-header">
+                <h3>📘 Panduan Penggunaan</h3>
+                <button class="btn-icon" id="closeGuideBtn" style="width: 32px; height: 32px;">✕</button>
+            </div>
+            <div class="guide-body">
+                <ul class="step-list">
+                    <li class="step-item">
+                        <span class="step-num">1</span>
+                        <div><strong>Pilih Tipe Layanan</strong>: <em>Carry-In</em> atau <em>In-Home</em> (Kunjungan). Di sistem In-Home, opsi <strong>Evening Care</strong> aktif & bisa ditambahkan walau hanya sekadar Pengecekan.</div>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-num">2</span>
+                        <div><strong>Pilih Jenis Produk</strong>: Pengisian nominal Freon otomatis muncul khusus untuk kategori AC & Kulkas.</div>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-num">3</span>
+                        <div><strong>Otomatisasi Level</strong>: Sistem otomatis merubah level ke <strong>Mayor</strong> saat mendeteksi adanya biaya part/freon. Pengguna tetap bebas merubah manual ke Minor/Special. Level <strong>Pengecekan</strong> otomatis dikunci jika ada nilai part/freon.</div>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-num">4</span>
+                        <div><strong>Level Pengecekan</strong>: Jika opsi ini dipilih manual (part = 0), input part dan freon otomatis dikunci (redup). Biaya yang dihitung murni jasa cek + kunjungan (jika in-home) + EC (jika dipilih) + PPN 11%.</div>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-num">💡</span>
+                        <div>Gunakan tombol <strong>🌓</strong> di bawah untuk merubah tampilan menjadi gelap/terang.</div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
     <footer class="main-footer">
-        <p>Dibuat dan Dikembangkan oleh <span>Tim Teknisi(IN704500) LG Electronics</span> © 2026</p>
+        <p>Dibuat dan Dikembangkan oleh <span>(IN704500) LG Electronics</span> © 2026</p>
     </footer>
 </div>
 
-    <script>
-        // MODAL PERSETUJUAN
-        const modal = document.getElementById('agreementModal');
-        const mainApp = document.getElementById('mainApp');
+<script>
+    // ELEMEN
+    const serviceTypeSelect = document.getElementById('serviceTypeSelect');
+    const deviceSelect = document.getElementById('device');
+    const damageLevel = document.getElementById('damageLevel');
+    const infoCek = document.getElementById('infoCek');
+    const sparepartName = document.getElementById('sparepartName');
+    const extraCost = document.getElementById('extraCost');
+    const freonCost = document.getElementById('freonCost');
+    const freonPanel = document.getElementById('freonPanel');
+    
+    const ecOptionPanel = document.getElementById('ecOption');
+    const cardEveningCare = document.getElementById('cardEveningCare');
+    const eveningCare = document.getElementById('eveningCare');
+    
+    const biayaJasaEl = document.getElementById('biayaJasa');
+    const rowKunjungan = document.getElementById('rowKunjungan');
+    const rowEC = document.getElementById('rowEC');
+    const rowSparepart = document.getElementById('rowSparepart');
+    const labelSparepartResult = document.getElementById('labelSparepartResult');
+    const valSparepart = document.getElementById('valSparepart');
+    const rowFreon = document.getElementById('rowFreon');
+    const valFreon = document.getElementById('valFreon');
+    const subTotalEl = document.getElementById('subTotal');
+    const ppnValEl = document.getElementById('ppnVal');
+    const totalPriceEl = document.getElementById('totalPrice');
 
-        // ELEMEN KALKULATOR
-        const openGuideBtn = document.getElementById('openGuideBtn');
-        const closeGuideBtn = document.getElementById('closeGuideBtn');
-        const popupGuide = document.getElementById('popupGuide');
-        const themeBtn = document.getElementById('themeBtn');
-        
-        const deviceSelect = document.getElementById('device');
-        const damageLevel = document.getElementById('damageLevel');
-        const infoCek = document.getElementById('infoCek');
-        const extraCost = document.getElementById('extraCost');
-        const freonCost = document.getElementById('freonCost');
-        const freonPanel = document.getElementById('freonPanel');
-        const biayaJasaEl = document.getElementById('biayaJasa');
-        const rowKunjungan = document.getElementById('rowKunjungan');
-        const rowEC = document.getElementById('rowEC');
-        const eveningCare = document.getElementById('eveningCare');
-        const rowSparepart = document.getElementById('rowSparepart');
-       const valSparepart = document.getElementById('valSparepart');
-        const rowFreon = document.getElementById('rowFreon');
-        const valFreon = document.getElementById('valFreon');
-        const subTotalEl = document.getElementById('subTotal');
-        const ppnValEl = document.getElementById('ppnVal');
-        const totalPriceEl = document.getElementById('totalPrice');
-        const serviceType = document.querySelectorAll('input[name="service_type"]');
+    const openGuideBtn = document.getElementById('openGuideBtn');
+    const closeGuideBtn = document.getElementById('closeGuideBtn');
+    const popupGuide = document.getElementById('popupGuide');
+    const themeBtn = document.getElementById('themeBtn');
 
-        // BUKA / TUTUP PANDUAN
-        openGuideBtn.addEventListener('click', () => popupGuide.style.display = 'block');
-        closeGuideBtn.addEventListener('click', () => popupGuide.style.display = 'none');
-        popupGuide.addEventListener('click', (e) => { if (e.target === popupGuide) popupGuide.style.display = 'none'; });
+    // BUKA / TUTUP PANDUAN
+    openGuideBtn.addEventListener('click', () => popupGuide.style.display = 'block');
+    closeGuideBtn.addEventListener('click', () => popupGuide.style.display = 'none');
+    popupGuide.addEventListener('click', (e) => { if (e.target === popupGuide) popupGuide.style.display = 'none'; });
 
-        // GANTI TEMA
-        themeBtn.addEventListener('click', () => {
-            const html = document.documentElement;
-            html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
-        });
+    // GANTI TEMA
+    themeBtn.addEventListener('click', () => {
+        const html = document.documentElement;
+        html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
+    });
 
-        // FUNGSI FORMAT RUPIAH
-        function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', { 
-                style: 'currency', 
-                currency: 'IDR', 
-                minimumFractionDigits: 0 
-            }).format(angka);
+    // INTERACTIVE EVENING CARE
+    cardEveningCare.addEventListener('click', () => {
+        eveningCare.checked = !eveningCare.checked;
+        if (eveningCare.checked) {
+            cardEveningCare.classList.add('checked');
+        } else {
+            cardEveningCare.classList.remove('checked');
         }
+        hitungBiaya();
+    });
 
-        // FUNGSI HITUNG ULANG - SUDAH DIPERBAIKI 100%
-        function hitungBiaya() {
-            const val = deviceSelect.value;
-            let biayaDasar = 0;
-            let biayaKunjungan = 0;
-            let biayaEC = 0;
-            let biayaSparepart = parseInt(extraCost.value) || 0;
-            let biayaFreon = parseInt(freonCost.value) || 0;
-            const selectedLevel = damageLevel.value;
+    // FUNGSI FORMAT RUPIAH
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat('id-ID', { 
+            style: 'currency', 
+            currency: 'IDR', 
+            minimumFractionDigits: 0 
+        }).format(angka);
+    }
 
-            // Cek Jenis Layanan
-            serviceType.forEach(opt => {
-                if (opt.checked && opt.value === 'in_home') {
-                    biayaKunjungan = 45000;
-                    document.getElementById('ecOption').style.display = 'block';
-                } else if (opt.checked && opt.value === 'in_shop') {
-                    biayaKunjungan = 0;
-                    document.getElementById('ecOption').style.display = 'none';
-                    eveningCare.checked = false;
-                }
-            });
+    let hadPartOrFreon = false;
 
-            // Cek Evening Care
-            if (eveningCare.checked) biayaEC = 150000;
+    // FUNGSI HITUNG ULANG & LOGIKA PINTAR
+    function hitungBiaya() {
+        const val = deviceSelect.value;
+        const tipeLayanan = serviceTypeSelect.value;
 
-            // TAMPILKAN INFO KHUSUS PENGECEKAN
-            infoCek.style.display = (selectedLevel === 'cek') ? 'block' : 'none';
+        let biayaSparepart = parseInt(extraCost.value) || 0;
+        let biayaFreon = parseInt(freonCost.value) || 0;
 
-            // ✅ LOGIKA UTAMA: BACA URUTAN KE-4 UNTUK PENGECEKAN
-            if (val) {
-                const harga = val.split('|').map(Number);
-                let levelBiaya = 0;
-                if (selectedLevel === 'minor') levelBiaya = harga[0];
-                if (selectedLevel === 'mayor') levelBiaya = harga[1];
-                if (selectedLevel === 'special') levelBiaya = harga[2];
-                if (selectedLevel === 'cek') levelBiaya = harga[3];  // <-- KUNCI BERHASIL
-                biayaDasar = levelBiaya;
+        // --- LOGIKA OTOMATISASI LEVEL ---
+        const hasPartOrFreon = (biayaSparepart > 0 || biayaFreon > 0);
+        const optionCek = document.querySelector('#damageLevel option[value="cek"]');
+
+        if (hasPartOrFreon) {
+            if (optionCek) optionCek.disabled = true; // Kunci opsi cek
+            if (!hadPartOrFreon || damageLevel.value === 'cek' || damageLevel.value === '') {
+                damageLevel.value = 'mayor'; // Otomatis ke Mayor
             }
+        } else {
+            if (optionCek) optionCek.disabled = false; // Buka opsi cek
+        }
+        hadPartOrFreon = hasPartOrFreon;
 
-            // Tampilkan / Sembunyikan baris
-            rowKunjungan.style.display = biayaKunjungan > 0 ? 'flex' : 'none';
-            rowEC.style.display = biayaEC > 0 ? 'flex' : 'none';
-            rowSparepart.style.display = biayaSparepart > 0 ? 'flex' : 'none';
-            rowFreon.style.display = biayaFreon > 0 ? 'flex' : 'none';
+        const selectedLevel = damageLevel.value;
 
-            // RUMUS PERHITUNGAN LENGKAP
-            const subTotal = biayaDasar + biayaKunjungan + biayaEC + biayaSparepart + biayaFreon;
-            const ppn = subTotal * 0.11;
-            const totalAkhir = subTotal + ppn;
+        let biayaDasar = 0;
+        let biayaKunjungan = 0;
+        let biayaEC = 0;
+        let namaSP = sparepartName.value.trim();
 
-            // TAMPILKAN KE LAYAR
-            biayaJasaEl.innerText = formatRupiah(biayaDasar);
-            valSparepart.innerText = formatRupiah(biayaSparepart);
-            valFreon.innerText = formatRupiah(biayaFreon);
-            subTotalEl.innerText = formatRupiah(subTotal);
-            ppnValEl.innerText = formatRupiah(ppn);
-            totalPriceEl.innerText = formatRupiah(totalAkhir);
+        // 1. CEK TIPE LAYANAN (Munculkan EC jika In-Home)
+        if (tipeLayanan === 'in_home') {
+            biayaKunjungan = 45000;
+            ecOptionPanel.style.display = 'block';
+        } else {
+            biayaKunjungan = 0;
+            ecOptionPanel.style.display = 'none';
+            eveningCare.checked = false;
+            cardEveningCare.classList.remove('checked');
         }
 
-        // Tampilkan kolom Freon khusus AC & Kulkas
-        deviceSelect.addEventListener('change', function() {
-            const optgroup = this.selectedOptions[0].closest('optgroup');
-            const type = optgroup.dataset.type;
-            freonPanel.style.display = (type === 'ac' || type === 'kulkas') ? 'block' : 'none';
-            hitungBiaya();
-        });
+        // 2. KUNCI INPUT (Part/Freon) SAAT PENGECEKAN DIPILIH
+        const isPengecekan = (selectedLevel === 'cek');
 
-        // Pemicu hitung ulang saat ada perubahan
-        damageLevel.addEventListener('change', hitungBiaya);
-        extraCost.addEventListener('input', hitungBiaya);
-        freonCost.addEventListener('input', hitungBiaya);
-        serviceType.forEach(opt => opt.addEventListener('change', hitungBiaya));
-        eveningCare.addEventListener('change', hitungBiaya);
-    </script>
+        if (isPengecekan) {
+            biayaSparepart = 0;
+            biayaFreon = 0;
+            namaSP = '';
+
+            sparepartName.disabled = true;
+            extraCost.disabled = true;
+            freonCost.disabled = true;
+
+            sparepartName.classList.add('locked-input');
+            extraCost.classList.add('locked-input');
+            freonCost.classList.add('locked-input');
+            
+            infoCek.style.display = 'block';
+        } else {
+            sparepartName.disabled = false;
+            extraCost.disabled = false;
+            freonCost.disabled = false;
+
+            sparepartName.classList.remove('locked-input');
+            extraCost.classList.remove('locked-input');
+            freonCost.classList.remove('locked-input');
+
+            infoCek.style.display = 'none';
+        }
+
+        // EC Dihitung Bebas
+        if (eveningCare.checked && tipeLayanan === 'in_home') {
+            biayaEC = 150000;
+        }
+
+        // 3. AMBIL BIAYA DASAR (Urutan ke-4 = Harga Cek)
+        if (val) {
+            const harga = val.split('|').map(Number);
+            let levelBiaya = 0;
+            if (selectedLevel === 'minor') levelBiaya = harga[0];
+            if (selectedLevel === 'mayor') levelBiaya = harga[1];
+            if (selectedLevel === 'special') levelBiaya = harga[2];
+            if (selectedLevel === 'cek') levelBiaya = harga[3];
+            biayaDasar = levelBiaya;
+        }
+
+        // 4. TAMPILAN BARIS BIAYA
+        rowKunjungan.style.display = biayaKunjungan > 0 ? 'flex' : 'none';
+        rowEC.style.display = biayaEC > 0 ? 'flex' : 'none';
+        rowFreon.style.display = biayaFreon > 0 ? 'flex' : 'none';
+        
+        if (biayaSparepart > 0) {
+            rowSparepart.style.display = 'flex';
+            labelSparepartResult.innerText = namaSP !== '' ? `Sparepart (${namaSP})` : 'Biaya Sparepart';
+        } else {
+            rowSparepart.style.display = 'none';
+        }
+
+        // 5. KALKULASI TOTAL
+        const subTotal = biayaDasar + biayaKunjungan + biayaEC + biayaSparepart + biayaFreon;
+        const ppn = subTotal * 0.11;
+        const totalAkhir = subTotal + ppn;
+
+        // 6. CETAK HASIL
+        biayaJasaEl.innerText = formatRupiah(biayaDasar);
+        valSparepart.innerText = formatRupiah(biayaSparepart);
+        valFreon.innerText = formatRupiah(biayaFreon);
+        subTotalEl.innerText = formatRupiah(subTotal);
+        ppnValEl.innerText = formatRupiah(ppn);
+        totalPriceEl.innerText = formatRupiah(totalAkhir);
+    }
+
+    // Tampilkan panel freon untuk AC/Kulkas
+    deviceSelect.addEventListener('change', function() {
+        const optgroup = this.selectedOptions[0].closest('optgroup');
+        const type = optgroup.dataset.type;
+        freonPanel.style.display = (type === 'ac' || type === 'kulkas') ? 'block' : 'none';
+        hitungBiaya();
+    });
+
+    // Pemicu
+    serviceTypeSelect.addEventListener('change', hitungBiaya);
+    damageLevel.addEventListener('change', hitungBiaya);
+    sparepartName.addEventListener('input', hitungBiaya);
+    extraCost.addEventListener('input', hitungBiaya);
+    freonCost.addEventListener('input', hitungBiaya);
+</script>
 
 </body>
 </html>
